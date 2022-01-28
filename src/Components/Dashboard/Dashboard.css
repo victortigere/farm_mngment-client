@@ -1,0 +1,11 @@
+/*
+ * Dashboard css File
+*/
+
+
+    /* propertys here */
+    .projects-display-inline{
+        /* display: inline-block !important; */
+        float: left !important;
+    }
+    
