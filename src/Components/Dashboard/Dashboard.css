@@ -8,4 +8,9 @@
         /* display: inline-block !important; */
         float: left !important;
     }
+
+    .links-no-decoration{
+        text-decoration: none !important;
+        color: #000;
+    }
     

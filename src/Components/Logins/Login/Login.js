@@ -31,33 +31,27 @@ function Login({props}) {
       UserAuthApiService.login({username, password})
         .then()
             .then((response) => {
-              verifyToken(response.accessToken)
-              if(response.accessToken != '' && isExpired !== true){
-                localStorage.setItem('token', response.accessToken);
-                navigate('/dashboard');
+              if(response.accessToken){
+                const decodedToken = jwt_decode(response.accessToken)
+                if(decodedToken.exp * 1000 < Date.now()){
+                  localStorage.removeItem('token');
+                  navigate('/login');
+                }
+                else{
+                  localStorage.setItem('token', response.accessToken);
+                  navigate('/dashboard');
+                }
+              }  
+              else{
+                  console.log('error')
+                  reset()  
               }
-            else{
-              reset();
-            }
           }).catch((err) => {
-
-            if(err && err.response){
-            
-            switch(err.response.status){
-                case 401:
-                    console.log("401 status");
-                    // props.loginFailure("Authentication Failed.Bad Credentials");
-                    break;
-                default:
-                    // props.loginFailure('Something Wrong!Please Try Again'); 
-                    console.log("401 status");
-            }
-
-            }
-            else{
-                // props.loginFailure('Something Wrong!Please Try Again');
-            }
-        })
+            console.log(err)
+            if(err.response.status){
+               console.log('400')
+              }
+            })
     }
   }
 

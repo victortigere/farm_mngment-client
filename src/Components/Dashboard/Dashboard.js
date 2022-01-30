@@ -1,13 +1,19 @@
 import React,  { useState, useEffect } from 'react';
+import jwt_decode from "jwt-decode";
 import './Dashboard.css';
 import ProjectApiService from '../../Services/ProjectsAPIService';
+import UserAuthApiService from '../../Services/UserAuthApiService';
 import { useNavigate } from 'react-router-dom';
 
 
 const Dashboard = () =>{
 
   const [projects, setProjects]  = useState([])
+  const [user, setUser]  = useState([])
   const navigate = useNavigate()
+  const localToken = localStorage.getItem('token')
+
+  const testToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aWN0b3IiLCJleHAiOjE2NDM0MzIwNDUsImlhdCI6MTY0MzQzMTk4NX0.hR90e0Wr_Bo2OMefT_28VRlvbcNVlVhW-NzQECXUF4akJmdYVoNCfUeZ9TUr1_zjcvBSmtpEz-sANRWIIxwm'
 
   const getProjects = () => {
     ProjectApiService.getProjects()
@@ -17,14 +23,30 @@ const Dashboard = () =>{
         })
   }
 
+  const userDetails = () => {
+    UserAuthApiService.getUserDetails()
+        .then()
+        .then( (response) => {
+          setUser(response)
+        })
+  }
+
+
   useEffect(() => {
-      if(localStorage.getItem('token') !== null){
-        getProjects();
-      }
-      else{
+    if(localToken){
+      const decodedToken = jwt_decode(localToken)
+      if(decodedToken.exp * 1000 < Date.now()){ 
+        localStorage.removeItem('token')
         navigate('/login')
       }
-       
+      else{
+        getProjects()
+        userDetails()
+      }
+    } else {
+      localStorage.removeItem('token')
+      navigate('/login')
+    }   
   },[]);
 
   const logOut = () => {
@@ -56,8 +78,13 @@ const Dashboard = () =>{
                 </li>
               </ul>
               <ul className="navbar-nav navbar-nav-right">
+              <li className="nav-item nav-profile dropdown">
+                    <a className="links-no-decoration">
+                      {user.username}
+                    </a>
+                </li>
                 <li className="nav-item nav-profile dropdown">
-                    <a className="dropdown-item"
+                    <a className="links-no-decoration"
                     onClick = {logOut}>
                       <i className="ti-power-off text-primary"></i>
                       Logout
