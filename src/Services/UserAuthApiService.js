@@ -1,7 +1,7 @@
 export default class ApiService {
 
     static registerUser(body) {
-        return fetch(`http://localhost:9088/whitelist/create-user`,{
+        return fetch(`http://localhost:8001/whitelist/create-user`,{
             'method': 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -12,7 +12,7 @@ export default class ApiService {
     }
 
     static login(body){
-        return fetch(`http://localhost:9088/api/authenticate/`,{
+        return fetch(`http://localhost:8001/api/authenticate/`,{
             'method' : 'POST',
             headers : { 
                 'Content-Type' : 'application/json',
@@ -24,7 +24,7 @@ export default class ApiService {
 
         static getUserDetails(body){
             const token = localStorage.getItem('token')
-            return fetch(`http://localhost:9088/api/user/info/`,{
+            return fetch(`http://localhost:8001/api/user/info/`,{
                 'method' : 'GET',
                 headers : { 
                     'Content-Type' : 'application/json',

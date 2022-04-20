@@ -4,9 +4,9 @@
 
 
     /* propertys here */
-    .projects-display-inline{
-        /* display: inline-block !important; */
-        float: left !important;
+    .projects-display-flex{
+      display: flex;
+      flex-direction: row;
     }
 
     .links-no-decoration{

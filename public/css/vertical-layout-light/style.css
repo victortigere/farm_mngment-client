@@ -19140,12 +19140,12 @@ a.text-dark:hover, a.text-dark:focus {
   animation-name: fadeOut;
 }
 
-.infinite-spin, #settings-trigger i {
+/* .infinite-spin, #settings-trigger i {
   animation-name: spin;
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
-}
+} */
 
 @keyframes spin {
   from {
@@ -19167,9 +19167,9 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
-.fadeInUp, #settings-trigger {
+/* .fadeInUp, #settings-trigger {
   animation-name: fadeInUp;
-}
+} */
 
 /*-------------------------------------------------------------------*/
 /* === Core Styles === */
@@ -30543,7 +30543,7 @@ div.tagsinput span.tag a {
   background: transparent;
 }
 
-#settings-trigger {
+/* #settings-trigger {
   position: fixed;
   bottom: 40px;
   right: 30px;
@@ -30573,23 +30573,23 @@ div.tagsinput span.tag a {
   -ms-animation-fill-mode: both;
   -o-animation-fill-mode: both;
   animation-fill-mode: both;
-}
+} */
 
-#settings-trigger i {
+/* #settings-trigger i {
   color: #ffffff;
   font-size: 1rem;
   line-height: 1rem;
-}
+} */
 
-.rtl #settings-trigger {
+/* .rtl #settings-trigger {
   right: auto;
   left: 30px;
-}
+} */
 
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   #settings-trigger {
     display: none;
   }
-}
+} */
 
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
