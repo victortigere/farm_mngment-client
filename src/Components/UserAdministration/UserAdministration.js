@@ -144,6 +144,13 @@ const UserAdministration = () =>  {
                       <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" {...register("email")}/>
                     </div>
                     <div class="form-group">
+                      <label for="exampleInputEmail1">ACCESS LEVEL</label>
+                      <select class="form-control form-control-sm" id="dealerType" {...register("dealerType", { required: true })}>
+                            <option value={1}>Superior</option>
+                            <option value={2}>Dealer</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
                       <label for="exampleInputPassword1">Password</label>
                       <input type="text" class="form-control" id="password" placeholder="Password" {...register("password")} />
                     </div>

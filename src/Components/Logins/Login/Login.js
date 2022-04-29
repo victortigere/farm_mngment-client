@@ -39,6 +39,8 @@ function Login({props}) {
                 }
                 else{
                   localStorage.setItem('token', response.accessToken);
+                  localStorage.setItem('username', response.user.username);
+                  localStorage.setItem('access', response.user.authorities);
                   navigate('/dashboard');
                 }
               }  

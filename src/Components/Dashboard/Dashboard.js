@@ -1,7 +1,6 @@
 import React,  { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import './Dashboard.css';
-import ProjectApiService from '../../Services/ProjectsAPIService';
 import UserAuthApiService from '../../Services/UserAuthApiService';
 import { useNavigate } from 'react-router-dom';
 import Template from '../Template/Template';
@@ -14,16 +13,6 @@ const Dashboard = () =>{
   const navigate = useNavigate()
   const localToken = localStorage.getItem('token')
 
-
-
-  const getProjects = () => {
-    ProjectApiService.getProjects()
-        .then()
-        .then( (response) => {
-          setProjects(response)
-        })
-  }
-
   const userDetails = () => {
     // UserAuthApiService.getUserDetails()
     //     .then()
@@ -35,14 +24,12 @@ const Dashboard = () =>{
 
   useEffect(() => {
     if(localToken){
-      console.log(localToken)
       const decodedToken = jwt_decode(localToken)
       if(decodedToken.exp * 1000 < Date.now()){ 
         localStorage.removeItem('token')
         navigate('/login')
       }
       else{
-        getProjects()
         userDetails()
       }
     } else {
