@@ -13,7 +13,6 @@ const Template = (props) => {
   }
 
   const renderNavLinks = () => {
-
     if(localStorage.getItem("access") === "ADMIN") {
       return <ul className="nav">
       <li className="nav-item">
@@ -42,7 +41,14 @@ const Template = (props) => {
         </div>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+        <a className="nav-link" data-toggle="collapse" href="/rates" aria-expanded="false" aria-controls="tables">
+          <i className="icon-grid-2 menu-icon"></i>
+          <span className="menu-title">Rates</span>
+          <i className="menu-arrow"></i>
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="collapse" href="/reports" aria-expanded="false" aria-controls="tables">
           <i className="icon-grid-2 menu-icon"></i>
           <span className="menu-title">Reports</span>
           <i className="menu-arrow"></i>

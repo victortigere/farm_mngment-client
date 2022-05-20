@@ -7,9 +7,14 @@ import Login from './Components/Logins/Login/Login';
 import Registration from './Components/Registration/Registration/Registration';
 import Dashboard from './Components/Dashboard/Dashboard';
 import UserAdministration from "./Components/UserAdministration/UserAdministration";
-import Deal from "./Components/Deal/Deal";
+import CreateDeal from "./Components/CreateDeal/CreateDeal";
+import DealInfo from "./Components/DealInfo/DealInfo";
 import {NotificationContainer} from 'react-notifications';
-import ViewDeal from "./Components/ViewDeal/ViewDeal";
+import AllDeals from "./Components/AllDeals/AllDeals";
+import Reports from "./Components/Reports/Reports";
+import EditDeal from "./Components/EditDeal/EditDeal";
+import FxPnL from "./Components/FxPnL/FxPnL";
+import Rates from "./Components/Rates/Rates";
 
 function App() {
   return (
@@ -21,8 +26,13 @@ function App() {
         <Route exact path="/" element={<Navigate to="/login" />} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/users" element={<UserAdministration/>} />
-        <Route path="/deals" element={<ViewDeal/>} />
-        <Route path="/create/deal" element={<Deal/>} />
+        <Route path="/deals" element={<AllDeals/>} />
+        <Route path="/create/deal" element={<CreateDeal/>} />
+        <Route path="/deal/:id" element={<DealInfo/>} />
+        <Route path="/edit/:id" element={<EditDeal/>} />
+        <Route path="/reports" element={<Reports/>} />
+        <Route path="/fx-pnl" element={<FxPnL/>} />
+        <Route path="/rates" element={<Rates/>} />
       </Routes>
       <NotificationContainer />
   </Router>

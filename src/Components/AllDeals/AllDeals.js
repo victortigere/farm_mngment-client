@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import './ViewDeal.css';
+import './AllDeals.css';
 import Template from '../Template/Template';
 import { useNavigate } from 'react-router-dom';
-import DealApiService from '../../Services/DealService';
+import DealApiService from '../../Services/TradeService';
 
 
 const ViewDeal = () => {
@@ -22,7 +22,6 @@ const ViewDeal = () => {
       })
       .catch( error => error)
   }
-
 
   useEffect(() => {
     getTrades()   
@@ -57,7 +56,12 @@ const ViewDeal = () => {
                               <td>{deal.client.name + "  " + deal.client.surname }</td>
                               <td>{deal.dealDate}</td>
                               <td>{deal.status}</td>
-                              <td><button type="button" class="btn btn-info btn-sm">More Info</button></td>
+                              <td>
+                                <button type="button" class="btn btn-info btn-sm"
+                                onClick={() => navigate(`/deal/${deal.id}`)}>
+                                  More Info
+                                </button>
+                              </td>
                             </tr>
                           ) :
                           <h4>No dealers saved</h4>

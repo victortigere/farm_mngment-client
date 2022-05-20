@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import Template from '../Template/Template';
-import './Deal.css';
+import './CreateDeal.css';
 
-import DealApiService from '../../Services/DealService';
+import DealApiService from '../../Services/TradeService';
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css'
 
@@ -18,12 +18,10 @@ const Deal = () =>  {
     event.target.value === disableOption ? setIsDisabled(true) : setIsDisabled(false)
   }
 
-
-  
-
   const {register, formState: { errors} , handleSubmit, reset} = useForm();
 
   const saveDeal = (data) => {
+    console.log("save deal")
     DealApiService.addDeaL(data)
       .then( response => {
         reset()
@@ -40,7 +38,7 @@ const Deal = () =>  {
 
     return (
       <Template>
-         <form className='forms-sample row' onSubmit={handleSubmit(saveDeal)}>
+        <form className='forms-sample row' onSubmit={handleSubmit(saveDeal)}>
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                   <div class="card-body">
@@ -124,7 +122,7 @@ const Deal = () =>  {
                             <select 
                                 class="form-control form-control-sm" 
                                 id="exampleFormControlSelect3" 
-                                {...register("interdesk", { required: true })}
+                                {...register("interDesk", { required: true })}
                                 onChange={handleChange}
                             >
                             <option value={"YES"}>YES</option>
@@ -166,8 +164,8 @@ const Deal = () =>  {
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Source Of Funds</label>
                         <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sourceOfFunds", { required: true })}>
-                          <option value={1}>CASH</option>
-                          <option value={2}>BANK</option>
+                          <option value={0}>CASH</option>
+                          <option value={1}>BANK</option>
                         </select>
                         {errors.sourceOfFunds && <span>Source Of Funds is required</span>}
                       </div>
@@ -175,8 +173,8 @@ const Deal = () =>  {
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Currency</label>
                         <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("currency", { required: true })}>
-                          <option value={1}>USD</option>
-                          <option value={2}>ZWL</option>
+                          <option value={0}>USD</option>
+                          <option value={1}>ZWL</option>
                         </select>
                         {errors.currency && <span>Currency is required</span>}
                       </div>
@@ -213,8 +211,8 @@ const Deal = () =>  {
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Paying Bank</label>
                         <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("payingBank")}>
-                          <option value={1}>BANK 1</option>
-                          <option value={2}>BANK 2</option>
+                          <option value={0}>BANK 1</option>
+                          <option value={1}>BANK 2</option>
                         </select>
                         {errors.payingBank && <span>Paying Bank is required</span>}
                       </div>
@@ -222,8 +220,8 @@ const Deal = () =>  {
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Sell Source Of Funds</label>
                         <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sellSourceOfFunds")}>
-                          <option value={1}>CASH</option>
-                          <option value={2}>BANK</option>
+                          <option value={0}>CASH</option>
+                          <option value={1}>BANK</option>
                         </select>
                         {errors.sellSourceOfFunds && <span>Source Of Funds is required</span>}
                       </div>
@@ -231,8 +229,8 @@ const Deal = () =>  {
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Currency</label>
                         <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sellCurrency")}>
-                          <option value={1}>USD</option>
-                          <option value={2}>ZWL</option>
+                          <option value={0}>USD</option>
+                          <option value={1}>ZWL</option>
                         </select>
                         {errors.sellCurrency && <span>Currencyis required</span>}
                       </div>
@@ -264,8 +262,7 @@ const Deal = () =>  {
                   </div>
               </div>
             </div>
-            </form>
-
+        </form>
       </Template>
     );
 
