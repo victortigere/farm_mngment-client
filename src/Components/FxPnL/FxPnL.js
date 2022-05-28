@@ -48,6 +48,7 @@ const FxPnL = () => {
                             <th>Buy Source</th>
                             <th>Sell</th>
                             <th>Sell Source</th>
+                            <th>Realized PnL</th>
                             <th>Realized Profit</th>
                             <th>Unrealized Profit</th>
                             <th>Total Profit</th>
@@ -64,9 +65,10 @@ const FxPnL = () => {
                               <td>{deal.sourceOfFunds}</td>
                               <td>{deal.sellCurrency} {deal.sellAmount}</td>
                               <td>{deal.sellSourceOfFunds}</td>
+                              <td>{deal.sellCurrency} {deal.realizedPnL}</td>
                               <td>{deal.currency} {deal.realizedProfit}</td>
-                              <td></td>
-                              <td></td>
+                              <td>{ deal.unRealizedProfit !== 0 ? "USD" + deal.unRealizedProfit : "Not yet calculated" }</td>
+                              <td>{ deal.totalProfitAndLoss !== 0 ?  "USD" + deal.totalProfitAndLoss : "Not yet calculated" }</td>
                             </tr> 
                             ) :
                             <h4>No dealers saved</h4>
