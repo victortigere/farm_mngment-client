@@ -20048,17 +20048,6 @@ code {
   z-index: -1;
 }
 
-.performance-overview-carousel .carousel-inner .item .icon.icon-a::before {
-  content: url("../../images/dashboard/shape-1.svg");
-}
-
-.performance-overview-carousel .carousel-inner .item .icon.icon-b::before {
-  content: url("../../images/dashboard/shape-1.svg");
-}
-
-.performance-overview-carousel .carousel-inner .item .icon.icon-c::before {
-  content: url("../../images/dashboard/shape-3.svg");
-}
 
 .performance-overview-carousel .carousel-control-prev,
 .performance-overview-carousel .carousel-control-next {
@@ -22169,11 +22158,6 @@ code {
   color: #ffffff;
 }
 
-.data-icon-card-primary .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
-}
-
 .data-icon-card-primary .background-icon i {
   z-index: 1;
   color: #ffffff;
@@ -22188,10 +22172,6 @@ code {
   color: #ffffff;
 }
 
-.data-icon-card-secondary .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
-}
 
 .data-icon-card-secondary .background-icon i {
   z-index: 1;
@@ -22207,10 +22187,6 @@ code {
   color: #ffffff;
 }
 
-.data-icon-card-success .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
-}
 
 .data-icon-card-success .background-icon i {
   z-index: 1;
@@ -22224,11 +22200,6 @@ code {
 
 .data-icon-card-info .card-title {
   color: #ffffff;
-}
-
-.data-icon-card-info .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
 }
 
 .data-icon-card-info .background-icon i {
@@ -22245,10 +22216,6 @@ code {
   color: #ffffff;
 }
 
-.data-icon-card-warning .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
-}
 
 .data-icon-card-warning .background-icon i {
   z-index: 1;
@@ -22262,11 +22229,6 @@ code {
 
 .data-icon-card-danger .card-title {
   color: #ffffff;
-}
-
-.data-icon-card-danger .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
 }
 
 .data-icon-card-danger .background-icon i {
@@ -22283,10 +22245,6 @@ code {
   color: #ffffff;
 }
 
-.data-icon-card-light .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
-}
 
 .data-icon-card-light .background-icon i {
   z-index: 1;
@@ -22300,11 +22258,6 @@ code {
 
 .data-icon-card-dark .card-title {
   color: #ffffff;
-}
-
-.data-icon-card-dark .background-icon::before {
-  content: url("../../images/dashboard/shape-4.svg");
-  position: absolute;
 }
 
 .data-icon-card-dark .background-icon i {
@@ -26932,10 +26885,6 @@ table.dataTable tbody td.select-checkbox:after {
   max-width: 100%;
 }
 
-/* Js-grid */
-.jsgrid .jsgrid-button {
-  background-image: url(../../images/sprites/jsgrid-icons.png);
-}
 
 .jsgrid .jsgrid-grid-header {
   border: 1px solid #CED4DA;

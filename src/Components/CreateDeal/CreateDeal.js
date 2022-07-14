@@ -1,27 +1,161 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from "react-hook-form";
+import { useForm} from "react-hook-form";
+import CurrencyInput from 'react-currency-input-field';
+import Modal from 'react-modal';
 import Template from '../Template/Template';
 import './CreateDeal.css';
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
 import DealApiService from '../../Services/TradeService';
+import ClientApiService from '../../Services/ClientService';
+import RatesApiService from '../../Services/RatesService';
 import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css'
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const customStyles = {
+  content: {
+    position : 'absolute',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    width : '40%',
+    marginRight: '-10%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement('#root');
 
 const Deal = () =>  {
 
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [ isDisabled, setIsDisabled ] = useState(false);
+  const [rates , setRates] = useState([])
+  const [sellAmount , setSellAmount] = useState(0)
+  const [sellCurrency , setSellCurrency] = useState("")
+  const [buyCurrency , setBuyCurrency] = useState("")
+  const [transactionRate , setTransactionRate] = useState(0)
+  // const [buyAmount, setBuyAmount] = useState(0)
+  const [clients, setClients] = useState([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { control, register, formState: { errors}, handleSubmit, reset} = useForm();
+  const { control: control2, register : register2, formState: { errors : errors2}, handleSubmit : handleSubmit2, reset : reset2} = useForm();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  
   const disableOption = "NO";
 
   const handleChange = (event) => {
     event.target.value === disableOption ? setIsDisabled(true) : setIsDisabled(false)
   }
 
-  const {register, formState: { errors} , handleSubmit, reset} = useForm();
+  function openModal() {
+    setIsOpen(true);
+  }
 
+  function afterOpenModal() {
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  useEffect(() => {
+      getClients()
+  }, [])
+
+  const getClients = () => {
+    ClientApiService.getClients()
+      .then((response) => {
+        setClients(response.data)
+      })
+        .catch((err) => {
+    })
+  }
+
+
+  const calculateSellAmount = (amount) => {
+
+    console.log(amount)
+
+    // var amount = amount;
+    // amount = amount.replace(/\,/g,''); 
+    // amount = parseInt(amount,10);
+
+    const filteredRates = rates.slice(0, 4)
+
+   var buyAmount = amount
+
+    const sell =  filteredRates.filter(function (rate)
+    {
+      return rate.currency == sellCurrency
+    }
+    );
+
+    const buy =  filteredRates.filter(function (rate)
+    {
+      return rate.currency == buyCurrency
+    }
+    );
+
+    // for currencies with risk rate greater than 1
+
+    if(buy[0].riskRate >= 1 && sell[0].riskRate >= 1){
+
+      if(buy[0].riskRate  < sell[0].riskRate){
+          setSellAmount(buyAmount * transactionRate )
+      }
+
+      if(buy[0].riskRate > sell[0].riskRate){
+        setSellAmount(buyAmount / transactionRate)
+      }
+
+  }
+
+    // for currencies with risk rate less than 1
+  
+    if(buy[0].riskRate < 1 || sell[0].riskRate < 1){
+
+    if(buy[0].riskRate  > sell[0].riskRate){
+      setSellAmount(buyAmount * transactionRate)
+    }
+
+    if(buy[0].riskRate < sell[0].riskRate){
+    setSellAmount(buyAmount / transactionRate)
+    }
+  }
+
+    return null;
+
+  }
+
+  const moneyFormatter = (amount) => {
+    calculateSellAmount(amount)
+  }
+ 
   const saveDeal = (data) => {
-    console.log("save deal")
+
     DealApiService.addDeaL(data)
       .then( response => {
         reset()
@@ -30,11 +164,40 @@ const Deal = () =>  {
         navigate("/deals")
       })
       .catch(error => {
+        console.log(error)
         reset()
         "00" === error.code ? NotificationManager.success(error.description, 'Success', 3000):
         NotificationManager.error(error.description, 'Error', 3000);
       })
   }
+
+  const getRates = (date) => {
+    RatesApiService.getRiskRatesbyDate(date)
+        .then(response => {
+          setRates(response.data)
+          if(response.data.length === 0){
+            NotificationManager.error('No rates found for this date', 'Error', 3000);
+          }
+        })
+  }
+
+  const addClient = (data) => {
+      closeModal()
+      ClientApiService.addClient(data)
+      .then( response => {
+        reset()
+        getClients()
+        "00" === response.code ? NotificationManager.success(response.description, 'Success', 3000):
+        NotificationManager.error(response.description, 'Success', 3000);
+      })
+      .catch(error => {
+        reset()
+        "00" === error.code ? NotificationManager.success(error.description, 'Success', 3000):
+        NotificationManager.error(error.description, 'Error', 3000);
+      })
+      reset2()
+  }
+
 
     return (
       <Template>
@@ -47,22 +210,43 @@ const Deal = () =>  {
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="">Date</label>
-                          <input type="date" class="form-control" id="dealDate" placeholder="Date" {...register("dealDate", { required: true } )}/>
-                          {errors.dealDate && <span>Deal Date is required</span>}
+                          <label>Date</label>
+                          <input type="date" 
+                            class="form-control" 
+                            id="dealDate" 
+                            placeholder="Date" 
+                            {...register("dealDate", { required: true } )}
+                            onChange = { (e) => {
+                             
+                             getRates(e.target.value)
+                            }}
+                          />
+                          {errors.dealDate && <span className='notification-color'>Deal Date is required</span>}
                         </div>
                       </div>
 
                       <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleFormControlSelect3">Customer Name</label>
-                          <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("client",{ required: true })}>
-                            <option value={1}>Victor Tigere</option>
-                            <option value={2}>Tinashe Nyamangara</option>
+                        <div className="form-group">
+                        
+                          <label>Select Memeber</label>
+                          <a className='add-customer-content-float-50'  onClick={openModal}>Add Client</a>
+
+                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("client", { required: true })}>
+                            <option value={1}>Select Customer</option>
+                            {clients && clients.map((client) => (
+                                <option key={client.id} 
+                                  value={client.id}
+                                >
+                                {client.name}
+                                </option>
+                              ))}
+                           
                           </select>
-                          {errors.client && <span>Client is required</span>}
+                            {errors.gymMember?.type === 'required' && "ID Number is required"}
                         </div>
                       </div>
+
+                      
                     </div>
 
                     <div class="row">
@@ -75,7 +259,7 @@ const Deal = () =>  {
                             <option value={3}>Business Banking</option>
                             <option value={4}>Banking Book</option>
                           </select>
-                          {errors.segment && <span>Segment is required</span>}
+                          {errors.segment && <span className='notification-color'>Segment is required</span>}
                         </div>
                       </div>
 
@@ -86,7 +270,7 @@ const Deal = () =>  {
                             <option value={1}>FX</option>
                             <option value={2}>INTERDESK</option>
                           </select>
-                          {errors.dealType && <span>Deal Type is required</span>}
+                          {errors.dealType && <span className='notification-color'>Deal Type is required</span>}
                         </div>
                       </div>
                     </div>
@@ -99,8 +283,9 @@ const Deal = () =>  {
                               <input type="text" class="form-control" 
                               id="customerName" 
                               placeholder="Transaction Rate" 
-                              {...register("transactionRate", { required: true })} />
-                              {errors.transactionRate && <span>Transaction Rate is required</span>}
+                              {...register("transactionRate", { required: true })} 
+                              onChange = { (e) => {setTransactionRate(e.target.value)}}/>
+                              {errors.transactionRate && <span className='notification-color'>Transaction Rate is required</span>}
                             </div>
                         </div>
                       
@@ -109,7 +294,7 @@ const Deal = () =>  {
                             <label for="">Risk Rate</label>
                             <input type="text" class="form-control" id="customerName" 
                             placeholder="Risk Rate" {...register("riskRate", { required: true })} />
-                            {errors.customerName && <span>Customer Name is required</span>}
+                            {errors.riskRate && <span className='notification-color'>Risk Rate is required</span>}
                           </div>
                         </div>
                     </div>
@@ -128,7 +313,7 @@ const Deal = () =>  {
                             <option value={"YES"}>YES</option>
                             <option value={"NO"}>NO</option>
                           </select>
-                          {errors.interdesk && <span>Interdesk is required</span>}
+                          {errors.interdesk && <span className='notification-color'>Interdesk is required</span>}
                           </div>
                       </div>
                     
@@ -158,46 +343,75 @@ const Deal = () =>  {
                           <option value={1}>BANK 1</option>
                           <option value={2}>BANK 2</option>
                         </select>
-                        {errors.receivingBank && <span>Receiving Bank is required</span>}
+                        {errors.receivingBank && <span className='notification-color'>Receiving Bank is required</span>}
                       </div>
 
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Source Of Funds</label>
-                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sourceOfFunds", { required: true })}>
+                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" 
+                        {...register("sourceOfFunds", { required: true })}
+                        >
                           <option value={0}>CASH</option>
                           <option value={1}>BANK</option>
                         </select>
-                        {errors.sourceOfFunds && <span>Source Of Funds is required</span>}
+                        {errors.sourceOfFunds && <span className='notification-color'>Source Of Funds is required</span>}
                       </div>
 
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Currency</label>
-                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("currency", { required: true })}>
-                          <option value={0}>USD</option>
-                          <option value={1}>ZWL</option>
+                        <select
+                             
+                            class="form-control form-control-sm" 
+                            id="buyCurrency" 
+                         //   value={buyCurrency}
+                        {...register("currency", { required: true })}
+                        onChange = { (e) => {
+
+                          if(e.target.value  === "EUR"){
+                            setOpen(true)
+                          }
+
+                          setBuyCurrency(e.target.value)
+                         
+                        }}
+                       
+                        >
+                          <option>Select Buy Currency</option>
+                          <option value={"USD"}>USD</option>
+                          <option value={"ZWL"}>ZWL</option>
+                          <option value={"ZAR"}>ZAR</option>
+                          <option value={"EUR"}>EUR</option>
                         </select>
-                        {errors.currency && <span>Currency is required</span>}
+                        {errors.currency && <span className='notification-color'>Currency is required</span>}
                       </div>
 
                       <div class="form-group">
-                        <label for="">Amount</label>
-                        <input type="text" class="form-control" id="clientName" placeholder="Amount" {...register("amount", { required: true })} />
-                        {errors.amount && <span>Amount is required</span>}
+                        <label for="">Amounts</label>
+                        <input type="number" 
+                          {...register("amount", {required : true})} 
+                             onChange = { (e) => {
+                              calculateSellAmount(e.target.value)
+                             }}
+                            class="form-control" id="amount" name='amount'
+                            placeholder="Amount" 
+                        />
+                      
+                        {errors.amount && <span className='notification-color'>Amount is required</span>}
                       </div>
 
                       <div class="form-group">
                           <label for="exampleFormControlSelect3">Settlement Status</label>
-                          <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("settlementStatus", { required: true })}>
+                          <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("settlementStatus", )}>
                             <option value={1}>SETTLED</option>
                             <option value={2}>UNSETTLED</option>
                           </select>
-                          {errors.settlementStatus && <span>Settlement Status is required</span>}
+                          {errors.settlementStatus && <span className='notification-color'>Settlement Status is required</span>}
                       </div>
 
                       <div class="form-group">
-                            <label for="">Settlement DATE</label>
+                            <label for="">Settlement Date</label>
                             <input type="date" class="form-control" id="dealDate" placeholder="Date"  {...register("settlementDate", { required: true })}/>
-                            {errors.dealDate && <span>Settlement Date is required</span>}
+                            {errors.settlementDate && <span className='notification-color'>Settlement Date is required</span>}
                       </div>
                   </div>
               </div>
@@ -214,7 +428,7 @@ const Deal = () =>  {
                           <option value={0}>BANK 1</option>
                           <option value={1}>BANK 2</option>
                         </select>
-                        {errors.payingBank && <span>Paying Bank is required</span>}
+                        {errors.payingBank && <span className='notification-color'>Paying Bank is required</span>}
                       </div>
 
                       <div class="form-group">
@@ -223,22 +437,41 @@ const Deal = () =>  {
                           <option value={0}>CASH</option>
                           <option value={1}>BANK</option>
                         </select>
-                        {errors.sellSourceOfFunds && <span>Source Of Funds is required</span>}
+                        {errors.sellSourceOfFunds && <span className='notification-color'>Source Of Funds is required</span>}
                       </div>
 
                       <div class="form-group">
                         <label for="exampleFormControlSelect3">Currency</label>
-                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sellCurrency")}>
-                          <option value={0}>USD</option>
-                          <option value={1}>ZWL</option>
+                        <select class="form-control form-control-sm" id="exampleFormControlSelect3" {...register("sellCurrency")}
+                         onChange = { (e) => {
+
+                          if(e.target.value  === "EUR"){
+                            setOpen(true)
+                          }
+
+                          setSellCurrency(e.target.value)
+                        }}
+                        >
+                          <option>Select Sell Currency</option>
+                          <option value={"USD"}>USD</option>
+                          <option value={"ZWL"}>ZWL</option>
+                          <option value={"ZAR"}>ZAR</option>
+                          <option value={"EUR"}>EUR</option>
                         </select>
-                        {errors.sellCurrency && <span>Currencyis required</span>}
+                        {errors.sellCurrency && <span className='notification-color'>Currencyis required</span>}
                       </div>
 
                       <div class="form-group">
                         <label for="">Amount</label>
-                        <input type="text" class="form-control" id="clientName" placeholder="Amount"  {...register("sellAmount")}/>
-                        {errors.sellAmount && <span>Amount is required</span>}
+                        {/* <input type="text" class="form-control" id="clientName" placeholder="Amount"  {...register("sellAmount")}
+                        value={sellAmount}
+                        /> */}
+                         <CurrencyInput 
+                            className='form-control'
+                            value={sellAmount}
+                            decimalScale={2}
+                         />
+                        {errors.sellAmount && <span className='notification-color'>Amount is required</span>}
                       </div>
 
                       <div class="form-group">
@@ -247,13 +480,13 @@ const Deal = () =>  {
                             <option value={1}>SETTLED</option>
                             <option value={2}>UNSETTLED</option>
                           </select>
-                          {errors.sellSettlementStatus && <span>Settlement Status is required</span>}
+                          {errors.sellSettlementStatus && <span className='notification-color'>Settlement Status is required</span>}
                       </div>
 
                       <div class="form-group">
-                            <label for="">Settlement DATE</label>
-                            <input type="date" class="form-control" id="dealDate" placeholder="Date"  {...register("sellSettlementDate")}/>
-                            {errors.sellSettlementDate && <span>Settlement Date is required</span>}
+                            <label for="">Settlement Date</label>
+                            <input type="date" class="form-control" id="dealDate" placeholder="Date"  {...register("sellSettlementDate", { required: true })}/>
+                            {errors.sellSettlementDate && <span className='notification-color'>Settlement Date is required</span>}
                       </div>
                     
 
@@ -263,6 +496,70 @@ const Deal = () =>  {
               </div>
             </div>
         </form>
+
+        <Modal
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+            >
+
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Add Client</h4>
+                
+                  <form class="forms-sample" onSubmit={handleSubmit2(addClient)}>
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">FirstName</label>
+                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="FirstName" {...register2("name", {required:true })} />
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">Surname</label>
+                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Surname" {...register2("surname",  {required:true })} />
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="exampleInputUsername1">National ID</label>
+                      <input type="text" class="form-control" id="username" placeholder="National ID" {...register2("nationalId",  {required:true })} />
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Address</label>
+                      <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Address" {...register2("address",  {required:true })}/>
+                    </div>
+                  
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Mobile Number</label>
+                      <input type="text" class="form-control" id="password" placeholder="Mobile Number" {...register2("mobileNumber",  {required:true })} />
+                    </div>
+                  
+                    <button type="submit" class="btn btn-primary mr-2 float-right">Submit</button>
+                    <button class="btn btn-light float-left" onClick={closeModal}>Cancel</button>
+                  </form>
+                </div>
+              </div>
+          
+        </Modal>
+
+        <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Rates Notification"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+              On capturing  a currency stronger than USD telling the dealer to capture rate as e.g EUR - 0.9764
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Done</Button>
+        </DialogActions>
+        </Dialog>
+
+
       </Template>
     );
 

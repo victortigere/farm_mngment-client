@@ -44,7 +44,6 @@ const Reports = () => {
           </div>
 
         </div>
-
       </Template>
     );
   }

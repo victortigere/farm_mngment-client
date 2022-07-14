@@ -1,7 +1,13 @@
-/*
- * Rates css File
-*/
+.loader-centered-position{
+    position: fixed;
+    top: 50%;
+    left: 55%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
 
-.Rates {
-    /* propertys here */
+.rates-content-float-50{
+    width: 50%;
+    float: left;
+    padding: 20px;
 }

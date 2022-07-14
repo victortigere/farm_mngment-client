@@ -6,3 +6,20 @@
 .float-left{
     float: left;
 }
+
+.notification-color{
+    color: #FF0000;
+}
+
+.create-deal-content-float-50{
+    width: 30%;
+    float: left;
+    /* padding: 20px; */
+}
+
+.add-customer-content-float-50{
+    width: 20%;
+    float: right;
+    text-decoration: none !important;
+    /* padding: 20px; */
+}

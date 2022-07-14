@@ -15,6 +15,9 @@ import Reports from "./Components/Reports/Reports";
 import EditDeal from "./Components/EditDeal/EditDeal";
 import FxPnL from "./Components/FxPnL/FxPnL";
 import Rates from "./Components/Rates/Rates";
+import AddRates from "./Components/AddRates/AddRates";
+import AddRevaluationRates from "./Components/AddRevaluationRates/AddRevaluationRates";
+import AddClient from "./Components/AddClient/AddClient";
 
 function App() {
   return (
@@ -33,6 +36,10 @@ function App() {
         <Route path="/reports" element={<Reports/>} />
         <Route path="/fx-pnl" element={<FxPnL/>} />
         <Route path="/rates" element={<Rates/>} />
+        <Route path="/addrates" element={<AddRates/>} />
+        <Route path="/addrevalrates" element={<AddRevaluationRates/>} />
+        <Route path="/addclient" element={<AddClient/>} />
+        
       </Routes>
       <NotificationContainer />
   </Router>

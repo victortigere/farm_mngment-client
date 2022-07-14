@@ -1,9 +1,9 @@
 import { URL } from "./Constants"
 
-export default class DealerApiService {
-    static getDealers() { 
+export default class ClientApiService {
+    static getClients() { 
         const token = localStorage.getItem('token')
-        return  fetch(URL + `/api/dealer/get/dealers`,{
+        return  fetch(URL + `/api/client/all`,{
             'method': 'GET',
             headers : {
                 'Content-Type' : 'application/json',
@@ -13,9 +13,9 @@ export default class DealerApiService {
             .then( resp => resp.json())
     }
 
-    static addDealer(data){
+    static addClient(data){
         const token = localStorage.getItem('token')
-        return fetch(URL + `/api/user/create/dealer`,{
+        return fetch(URL + `/api/client/save`,{
                 'method': 'POST',
                 headers : {
                     'Content-Type' : 'application/json',
@@ -25,5 +25,4 @@ export default class DealerApiService {
                 })
                 .then( resp => resp.json())
     }
-
 }

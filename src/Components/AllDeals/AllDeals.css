@@ -1,7 +1,5 @@
-/*
- * ViewDeal css File
-*/
-
-.ViewDeal {
-    /* propertys here */
+.deals-content-float-50{
+    width: 50%;
+    float: left;
+    padding: 20px;
 }

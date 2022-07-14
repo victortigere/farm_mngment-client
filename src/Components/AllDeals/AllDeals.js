@@ -17,15 +17,22 @@ const ViewDeal = () => {
   const getTrades = () => {
     DealApiService.getDealS()
       .then( response => {
-        console.log(response) 
         setDeals(response.data) 
       })
       .catch( error => error)
   }
 
-  useEffect(() => {
-    getTrades()   
-  },[]);
+  const getDealsByDate = (date) => {
+    DealApiService.getDealsByDate(date)
+      .then( response => {
+        setDeals(response.data) 
+      })
+      .catch( error => error)
+  }
+
+  // useEffect(() => {
+  //   getTrades()   
+  // },[]);
 
   
   return(
@@ -34,9 +41,19 @@ const ViewDeal = () => {
         <div className="card">
               <h4 class="card-title padding-top">My Deals</h4>
               <div class="card-body">
-                    {/* <div> */}
-                      <button type="button" class="btn btn-info btn-rounded btn-fw float-right" onClick={navigateToCreateDeal}>Create Deal</button>
-                    {/* </div> */}
+
+                    <div>
+                    <input type="date" 
+                            class="form-control  col-md-4 deals-content-float-50" 
+                            id="dealDate" 
+                            placeholder="Date"
+                            onChange = { (e) => {
+                              getDealsByDate(e.target.value)
+                            }} 
+                          />
+                      <button type="button" class="btn btn-info btn-rounded btn-fw float-right deals-content-float-50 col-md-3" onClick={navigateToCreateDeal}>Create Deal</button>
+                    </div>
+                   
                 
                     <div class="table-responsive">
                       <table class="table table-hover">

@@ -20,7 +20,7 @@ function Registration() {
 
   const redirectToLogin = (response) => {
     if(confirmPassword){
-      console.log("redirecting now")
+      console.log()
     } 
   }
 
@@ -29,10 +29,10 @@ function Registration() {
       if(password === confirmPassword){
         UserAuthApiService.registerUser({username, password})
         .then()
-            .then( response => console.log(response))
+            .then( response => {})
             .then(resetAuthFields())
             .then(response => redirectToLogin(response))
-            .catch( error => console.log(error))
+            .catch( error => {})
       }
     }
 

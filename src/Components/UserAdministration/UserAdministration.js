@@ -48,7 +48,7 @@ const UserAdministration = () =>  {
   const getDealers = () => {
     DealerApiService.getDealers()
     .then( response => setDealers(response.data))
-    .catch( error => console.log(error))
+    .catch( error => {})
   }
 
   const saveDealer = data => {
@@ -148,6 +148,7 @@ const UserAdministration = () =>  {
                       <select class="form-control form-control-sm" id="dealerType" {...register("dealerType", { required: true })}>
                             <option value={1}>Superior</option>
                             <option value={2}>Dealer</option>
+                            <option value={3}>Risk Manager</option>
                       </select>
                     </div>
                     <div class="form-group">

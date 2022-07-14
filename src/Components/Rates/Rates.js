@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Template from '../Template/Template';
 import './Rates.css';
 import RatesApiService from '../../Services/RatesService';
+import Loader from "react-js-loader";
 
 import Modal from 'react-modal';
 import { useForm } from "react-hook-form";
@@ -28,7 +30,10 @@ const Rates = () => {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const { control, register, formState: { errors}, handleSubmit, reset} = useForm();
-  const [rates, setRates] = useState([])
+  const [riskRates, setRates] = useState([])
+  const [revaluationRates, setRevalutionRates] = useState([])
+  const [ showLoader, setShowLoader] = useState(false)
+  const navigate = useNavigate()
 
   function openModal() {
     setIsOpen(true);
@@ -48,66 +53,178 @@ const Rates = () => {
         reset()
         "00" === response.code ? NotificationManager.success(response.description, 'Success', 3000):
         NotificationManager.error(response.description, 'Success', 3000);
-        getRates()
+        // getRates()
       })
       .catch( error => {
-        console.log(error)
         "00" === error.code ? NotificationManager.success(error.description, 'Success', 3000):
         NotificationManager.error(error.description, 'Error', 3000)
       })
   }
 
-  const getRates = () => {
-    RatesApiService.getRates()
+  // const getRates = () => {
+  //   RatesApiService.getRates()
+  //   .then( response => {
+  //     setShowLoader(false)
+  //     setRates(response.data)
+  //   })
+  //   .catch(error => {})
+  // }
+
+  // const getRevaluationRates = () => {
+  //   RatesApiService.getRates()
+  //   .then( response => {
+  //     setShowLoader(false)
+  //     setRevalutionRates(response.data)
+  //   })
+  //   .catch(error => {})
+  // }
+
+  const getRiskRatesByDate = (date) => {
+    RatesApiService.getRiskRatesbyDate(date)
     .then( response => {
+      setShowLoader(false)
       setRates(response.data)
+      console.log(response.data)
     })
     .catch(error => {})
   }
 
-  useEffect(() => {
-      getRates()
-  }, [])
+  
+  const getRevaluationRatesByDate = (date) => {
+    RatesApiService.getRevaluationRatesbyDate(date)
+    .then( response => {
+      setShowLoader(false)
+      setRevalutionRates(response.data)
+    })
+    .catch(error => {})
+  }
+
+  // useEffect(() => {
+  //     getRates()
+  //     getRevaluationRates()
+  // }, [])
 
   return (
       <Template>
-    <div className="col-lg-12 grid-margin">
-      <div className="card">
-        <h4 class="card-title padding-top">Trading Rates</h4>
-        <div class="card-body">
-              {/* <div> */}
-                <h4 class="card-title floaot-left">Rates</h4>
-                <button type="button" class="btn btn-info btn-rounded btn-fw float-right" onClick={openModal}>Add Rates</button>
-              {/* </div> */}
-          
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Date</th>
-                      <th>Risk Rate</th>
-                      <th>Revaluation Rate</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      rates.map(rate => 
-                        <tr key={rate.id}>
-                        <td>{rate.id}</td>
-                        <td>{rate.date}</td>
-                        <td>{rate.riskRate}</td>
-                        <td>{rate.revalRate}</td>
-                        <td></td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+
+        {  showLoader ?
+          <div className={"itemn loader-centered-position"}>
+          <Loader type="bubble-scale" bgColor={"#0000FF"} title={"bubble-scale"} color={'#FFFFFF'} size={100} />
+          </div> :
+        
+        <div className='row'>
+
+        
+          <div className="col-lg-6 grid-margin">
+            <div className="card">
+              <h4 class="card-title padding-top">Risk Rates</h4>
+              <div class="card-body">
+                    {/* <div> */}
+                      <h4 class="card-title floaot-left">Rates</h4>
+                      <input type="date" 
+                            class="form-control  col-md-4 rates-content-float-50" 
+                            id="dealDate" 
+                            placeholder="Date"
+                            onChange = { (e) => {
+                              getRiskRatesByDate(e.target.value)
+                            }} 
+                          />
+                      <button type="button" 
+                          className="btn btn-info btn-rounded btn-fw float-right col-md-3 rates-content-float-50" 
+                          onClick={() => {navigate('/addrates')}}>
+                          Add Risk Rates
+                      </button>
+                    {/* </div> */}
+                
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Currency</th>
+                            <th>Risk Rate</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            riskRates.map(rate => 
+                              <tr key={rate.id}>
+                              <td>{rate.date}</td>
+                              <td>{rate.creationDate.slice(11,-13)}</td>
+                              <td>{rate.currency}</td>
+                              <td>{rate.riskRate}</td>
+                              <td></td>
+                            </tr>
+                          )} 
+                        </tbody>
+                      </table> 
+                    </div>
               </div>
-        </div>
-      </div>
-    </div>
+            </div>
+          </div>
+
+          <div className="col-lg-6 grid-margin">
+          <div className="card">
+            <h4 class="card-title padding-top">Revaluation Rates</h4>
+            <div class="card-body">
+                  {/* <div> */}
+                    <h4 class="card-title floaot-left">Rates</h4>
+
+                    <div className='rates-header'>
+
+                    <input type="date" 
+                            class="form-control  col-md-4 rates-content-float-50" 
+                            id="dealDate" 
+                            placeholder="Date" 
+                            onChange = { (e) => {
+                              getRevaluationRatesByDate(e.target.value)
+                            }}
+                          />
+
+                        <button type="button" 
+                            className='btn btn-info btn-rounded btn-fw float-right col-md-4  rates-content-float-50' 
+                            onClick={() => {navigate('/addrevalrates')}}>
+                              Add Revaluation Rates
+                        </button>
+                    </div>
+                    
+                   
+                  {/* </div> */}
+              
+                  <div class="table-responsive">
+                    { 
+                      revaluationRates !== [] ? 
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Currency</th>
+                              <th>Revaluation Rate</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {
+                            revaluationRates.map(rate => 
+                              <tr key={rate.id}>
+                              <td>{rate.date}</td>
+                              <td>{rate.currency}</td>
+                              <td>{rate.revaluationRate}</td>
+                              <td></td>
+                            </tr>
+                          )}
+                          </tbody>
+                        </table> 
+                            : 
+                        <h4></h4>
+                    }
+                  </div>
+            </div>
+          </div>
+          </div>
+
+          </div>
+        }
 
     <Modal
       isOpen={modalIsOpen}

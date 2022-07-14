@@ -1,7 +1,8 @@
+import {URL } from "./Constants"
 export default class ApiService {
 
     static registerUser(body) {
-        return fetch(`http://localhost:8001/whitelist/create-user`,{
+        return fetch(URL + `/whitelist/create-user`,{
             'method': 'POST',
             headers : {
                 'Content-Type' : 'application/json'
@@ -12,7 +13,7 @@ export default class ApiService {
     }
 
     static login(body){
-        return fetch(`http://localhost:8001/api/authenticate/`,{
+        return fetch(URL + `/api/authenticate/`,{
             'method' : 'POST',
             headers : { 
                 'Content-Type' : 'application/json',
@@ -24,7 +25,7 @@ export default class ApiService {
 
         static getUserDetails(body){
             const token = localStorage.getItem('token')
-            return fetch(`http://localhost:8001/api/user/info/`,{
+            return fetch(URL + `/api/user/info/`,{
                 'method' : 'GET',
                 headers : { 
                     'Content-Type' : 'application/json',

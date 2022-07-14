@@ -1,13 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import Loader from "react-js-loader";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 import './Template.css';
 
-import { useNavigate } from 'react-router-dom';
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Template = (props) => {
 
+  // To Do
+  // Add Loader to all Components
+
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate()
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  
   const logOut = () => {
+    setOpen(false);
     localStorage.removeItem('token')
     navigate('/login')
   }
@@ -16,76 +41,151 @@ const Template = (props) => {
     if(localStorage.getItem("access") === "ADMIN") {
       return <ul className="nav">
       <li className="nav-item">
-        <a className="nav-link" href="/dashboard">
+        <a className="nav-link"
+        onClick={() => navigate("/dashboard")}
+        >
           <i className="icon-grid menu-icon"></i>
           <span className="menu-title">Dashboard</span>
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="/users" aria-expanded="false" aria-controls="ui-basic">
+        <a className="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic"
+          onClick={() => navigate("/users")}>
           <i className="icon-layout menu-icon"></i>
           <span className="menu-title">Users</span>
           <i className="menu-arrow"></i>
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="/deals" aria-expanded="false" aria-controls="form-elements">
+        <a className="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="form-elements"
+        onClick={() => navigate("/deals")}>
           <i className="icon-columns menu-icon"></i>
           <span className="menu-title">Deals</span>
           <i className="menu-arrow"></i>
         </a>
-        <div className="collapse" id="form-elements">
-          <ul className="nav flex-column sub-menu">
-            <li className="nav-item"><a className="nav-link" href="../../pages/forms/basic_elements.html">Basic Elements</a></li>
-          </ul>
-        </div>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="/rates" aria-expanded="false" aria-controls="tables">
+        <a className="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="tables"
+        onClick={() => navigate("/rates")}>
           <i className="icon-grid-2 menu-icon"></i>
           <span className="menu-title">Rates</span>
           <i className="menu-arrow"></i>
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="/reports" aria-expanded="false" aria-controls="tables">
+        <a className="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="tables"
+        onClick={() => navigate("/reports")}>
           <i className="icon-grid-2 menu-icon"></i>
           <span className="menu-title">Reports</span>
           <i className="menu-arrow"></i>
         </a>
-        <div className="collapse" id="tables">
-          <ul className="nav flex-column sub-menu">
-            <li className="nav-item"> <a className="nav-link" href="../../pages/tables/basic-table.html">Basic table</a></li>
-          </ul>
-        </div>
       </li>   
     </ul>
     }
 
     if(localStorage.getItem("access") === "DEALER") {
       return <ul className="nav">
-      <li className="nav-item">
-        <a className="nav-link" href="/dashboard">
-          <i className="icon-grid menu-icon"></i>
+                <li className="nav-item">
+                  <a className="nav-link" 
+                    data-toggle="collapse" 
+                    aria-expanded="false" 
+                    aria-controls="form-elements"
+                    onClick={()=>{navigate("/dashboard")}}
+                    >
+                    <i className="icon-columns menu-icon"></i>
+                    <span className="menu-title">Dashboard</span>
+                    <i className="menu-arrow"></i>
+                  </a>
+                </li> 
+                <li className="nav-item">
+                  <a className="nav-link" 
+                    data-toggle="collapse" 
+                    aria-expanded="false" 
+                    aria-controls="form-elements"
+                    onClick={()=>{navigate("/deals")}}
+                    >
+                    <i className="icon-columns menu-icon"></i>
+                    <span className="menu-title">Deals</span>
+                    <i className="menu-arrow"></i>
+                  </a>
+                </li>    
+                <li className="nav-item">
+                  <a className="nav-link" 
+                    data-toggle="collapse" 
+                    aria-expanded="false" 
+                    aria-controls="form-elements"
+                    onClick={()=>{navigate("/rates")}}
+                    >
+                    <i className="icon-columns menu-icon"></i>
+                    <span className="menu-title">Rates</span>
+                    <i className="menu-arrow"></i>
+                  </a>
+                </li> 
+                <li className="nav-item">
+                  <a className="nav-link" 
+                    data-toggle="collapse" 
+                    aria-expanded="false" 
+                    aria-controls="form-elements"
+                    onClick={()=>{navigate("/reports")}}
+                    >
+                    <i className="icon-columns menu-icon"></i>
+                    <span className="menu-title">Reports</span>
+                    <i className="menu-arrow"></i>
+                  </a>
+                </li> 
+              </ul>
+    }
+
+    if(localStorage.getItem("access") === "ASSESSOR") {
+      return <ul className="nav">
+       <li className="nav-item">
+        <a className="nav-link" data-toggle="collapse"
+         onclick = {()=>{navigate("/dashboard" )}} 
+         aria-expanded="false" 
+         aria-controls="form-elements"
+         >
+          <i className="icon-columns menu-icon"></i>
           <span className="menu-title">Dashboard</span>
+          <i className="menu-arrow"></i>
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" data-toggle="collapse" href="/deals" aria-expanded="false" aria-controls="form-elements">
+        <a className="nav-link" 
+          data-toggle="collapse" 
+          onclick = {()=>{navigate("/deals" )}}  
+          aria-expanded="false" 
+          aria-controls="form-elements">
           <i className="icon-columns menu-icon"></i>
           <span className="menu-title">Deals</span>
           <i className="menu-arrow"></i>
         </a>
-        <div className="collapse" id="form-elements">
-          <ul className="nav flex-column sub-menu">
-            <li className="nav-item"><a className="nav-link" href="../../pages/forms/basic_elements.html">Basic Elements</a></li>
-          </ul>
-        </div>
-      </li>   
+      </li> 
+      <li className="nav-item">
+        <a className="nav-link" 
+          data-toggle="collapse" 
+          onclick = {()=>{navigate("/rates" )}}  
+          aria-expanded="false" 
+          aria-controls="form-elements">
+          <i className="icon-columns menu-icon"></i>
+          <span className="menu-title">Rates</span>
+          <i className="menu-arrow"></i>
+        </a>
+      </li> 
+      <li className="nav-item">
+        <a className="nav-link" 
+          data-toggle="collapse" 
+          onclick = {()=>{navigate("/reports" )}}  
+          aria-expanded="false" 
+          aria-controls="form-elements">
+          <i className="icon-columns menu-icon"></i>
+          <span className="menu-title">Deals</span>
+          <i className="menu-arrow"></i>
+        </a>
+      </li>  
     </ul>
     }
 
-    if(localStorage.getItem("access") === "ASSESSOR") {
+    if(localStorage.getItem("access") === "RISK_MANAGER") {
       return <ul className="nav">
       <li className="nav-item">
         <a className="nav-link" href="/dashboard">
@@ -104,12 +204,21 @@ const Template = (props) => {
             <li className="nav-item"><a className="nav-link" href="../../pages/forms/basic_elements.html">Basic Elements</a></li>
           </ul>
         </div>
-      </li>   
+      </li>  
+      <li className="nav-item">
+        <a className="nav-link" data-toggle="collapse" href="/deals" aria-expanded="false" aria-controls="form-elements">
+          <i className="icon-columns menu-icon"></i>
+          <span className="menu-title">Rates</span>
+          <i className="menu-arrow"></i>
+        </a>
+        <div className="collapse" id="form-elements">
+          <ul className="nav flex-column sub-menu">
+            <li className="nav-item"><a className="nav-link" href="../../pages/forms/basic_elements.html">Basic Elements</a></li>
+          </ul>
+        </div>
+      </li>  
     </ul>
     }
-
-
-
   }
 
   return(
@@ -143,7 +252,7 @@ const Template = (props) => {
           </li>
           <li className="nav-item nav-profile dropdown">
               <a className="links-no-decoration"
-              onClick = {logOut}>
+              onClick = {handleClickOpen}>
                 <i className="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -176,12 +285,30 @@ const Template = (props) => {
       {/* <!-- partial --> */}
       <div className="main-panel">        
         <div className="content-wrapper">
-        
             {props.children}
-       
         </div>
       </div>
     </div>
+
+    <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Confirm Logout"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Are you sure, you want to logout ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={logOut}>Log out</Button>
+        </DialogActions>
+        </Dialog>
+
   </div>
 
   );

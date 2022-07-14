@@ -20,12 +20,9 @@ const EditDeal = () =>  {
   const {register, formState: { errors} , handleSubmit, reset} = useForm();
 
   const getTrade = (id) => {
-    console.log(id)
     DealApiService.getDeal(id)
       .then( response => {
         setDeal(response.data) 
-        console.log(response.data) 
-        console.log(deal) 
       })
       .catch( error => error)
   }

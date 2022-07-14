@@ -1,19 +1,27 @@
 {
-  "name": "farm-managemeny-client",
+  "name": "treasury-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.8.4",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "dinero.js": "^1.9.1",
     "jwt-decode": "^3.1.2",
     "react": "^17.0.2",
+    "react-currency-format": "^1.1.0",
+    "react-currency-input-field": "^3.6.4",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.29.0",
+    "react-js-loader": "^0.1.0",
     "react-modal": "^3.14.4",
     "react-notifications": "^1.7.3",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-select": "^5.3.2",
     "web-vitals": "^2.1.2"
   },
   "scripts": {

@@ -20,8 +20,6 @@ function Login({props}) {
      const decodedToken = jwt_decode(token)
      if(decodedToken.exp * 1000 < Date.now()){
           setExpiry(true)
-          console.log("validating token")
-          console.log(isExpired)
      }
 
   }
@@ -45,13 +43,11 @@ function Login({props}) {
                 }
               }  
               else{
-                  console.log('error')
                   reset()  
               }
           }).catch((err) => {
-            console.log(err)
             if(err.response.status){
-               console.log('400')
+               console.log()
               }
             })
     }
