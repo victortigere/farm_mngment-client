@@ -260,7 +260,7 @@ const DealInfo = () =>  {
                                 <td>{deal.client} </td>
                                 <td>{deal.createdBy}</td>
                                 <td>
-                                {/* <CurrencyFormat value={deal.amount} 
+                                <CurrencyFormat value={deal.amount} 
                                     decimalScale={2} 
                                     displayType={'text'} 
                                     thousandSeparator={true} 
@@ -268,12 +268,11 @@ const DealInfo = () =>  {
                                     prefix={deal.currency}
                                     renderText={value => 
                                     <div>{value}</div>} 
-                                /> */}
-                                {deal.currency}{deal.amount}
+                                />
                                 </td>
                                 <td>{deal.sourceOfFunds}</td>
                                 <td> 
-                                    {/* <CurrencyFormat value={deal.sellAmount} 
+                                    <CurrencyFormat value={deal.sellAmount} 
                                         decimalScale={2} 
                                         displayType={'text'} 
                                         thousandSeparator={true} 
@@ -281,8 +280,7 @@ const DealInfo = () =>  {
                                         prefix={deal.sellCurrency}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    /> */}
-                                    {deal.sellCurrency}{deal.sellAmount}
+                                    />
                                 </td>
                                 <td>{deal.sellSourceOfFunds}</td>
                                 <td>
@@ -298,7 +296,7 @@ const DealInfo = () =>  {
                                     />
                                 </td>
                                 <td>
-                                {/* <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
+                                <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
                                         decimalScale={2} 
                                         displayType={'text'} 
                                         thousandSeparator={true} 
@@ -306,7 +304,7 @@ const DealInfo = () =>  {
                                         prefix={'USD'}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    /> */}
+                                    />
                                     
                                 </td>
                                 {/* <td>Not yet calculated</td>

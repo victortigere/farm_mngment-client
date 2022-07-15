@@ -87,7 +87,7 @@ const FxPnL = () => {
                                 <td>{deal.client.name} {deal.client.surname} </td>
                                 <td>{deal.createdBy}</td>
                                 <td>
-                                {/* <CurrencyFormat value={deal.amount} 
+                                <CurrencyFormat value={deal.amount} 
                                     decimalScale={2} 
                                     displayType={'text'} 
                                     fixedDecimalScale={true}
@@ -95,12 +95,11 @@ const FxPnL = () => {
                                     prefix={deal.currency}
                                     renderText={value => 
                                     <div>{value}</div>} 
-                                /> */}
-                                {deal.currency}{deal.amount}
+                                />
                                 </td>
                                 <td>{deal.sourceOfFunds}</td>
                                 <td> 
-                                    {/* <CurrencyFormat value={deal.sellAmount} 
+                                    <CurrencyFormat value={deal.sellAmount} 
                                         decimalScale={2} 
                                         displayType={'text'} 
                                         fixedDecimalScale={true}
@@ -108,8 +107,7 @@ const FxPnL = () => {
                                         prefix={deal.sellCurrency}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    /> */}
-                                     {deal.sellCurrency}{deal.sellAmount}
+                                    />
                                 </td>
                                 <td>{deal.sellSourceOfFunds}</td>
                                 <td>
@@ -124,6 +122,18 @@ const FxPnL = () => {
                                     />
                                 </td>
                                 <td>
+                                <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
+                                        decimalScale={2} 
+                                        displayType={'text'} 
+                                        fixedDecimalScale={true}
+                                        thousandSeparator={true} 
+                                        prefix={'USD'}
+                                        renderText={value => 
+                                        <div>{value}</div>} 
+                                    />
+                                </td>
+                                 
+                                <td>
                                 {/* <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
                                         decimalScale={2} 
                                         displayType={'text'} 
@@ -132,17 +142,12 @@ const FxPnL = () => {
                                         prefix={'USD'}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    /> */}
-                                     {/* {deal.sellCurrency}{deal.realizedPnL} */}
-                                </td>
-                                
-                                
-                                <td>
-                                  {/* {
+                                    />
+                                  {
                                  deal.unRealizedProfit !== null ? "USD" + deal.unRealizedProfit.toFixed(3) : "Not yet calculated" } */}
                                  </td> 
                                <td>
-                                {/* { deal.totalProfitAndLoss !==  null ?  
+                                {/* { deal.totalProfitAndLoss !==  0.0 ?  
                                   <CurrencyFormat value={deal.totalProfitAndLoss}
                                             decimalScale={2} 
                                             displayType={'text'} 
