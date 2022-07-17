@@ -19,6 +19,7 @@ const FxPnL = () => {
   }
 
   const getFxPnLByDate= (date) => {
+      console.log()
       ReportsApiService.getFxPnLByDate(date)
       .then(response => {
         setDeals(response.data)
@@ -122,6 +123,7 @@ const FxPnL = () => {
                                     />
                                 </td>
                                 <td>
+                                {deal.realizedPnlBaseCurrency !== null ? 
                                 <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
                                         decimalScale={2} 
                                         displayType={'text'} 
@@ -130,24 +132,26 @@ const FxPnL = () => {
                                         prefix={'USD'}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    />
+                                    /> : 
+                                    "Not yet calculated"
+                                        }
                                 </td>
                                  
                                 <td>
-                                {/* <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
-                                        decimalScale={2} 
-                                        displayType={'text'} 
-                                        fixedDecimalScale={true}
-                                        thousandSeparator={true} 
-                                        prefix={'USD'}
-                                        renderText={value => 
-                                        <div>{value}</div>} 
-                                    />
                                   {
-                                 deal.unRealizedProfit !== null ? "USD" + deal.unRealizedProfit.toFixed(3) : "Not yet calculated" } */}
+                                 deal.unRealizedProfit !== null ?   
+                                 <CurrencyFormat value={deal.unRealizedProfit} 
+                                 decimalScale={2} 
+                                 displayType={'text'} 
+                                 fixedDecimalScale={true}
+                                 thousandSeparator={true} 
+                                 prefix={'USD'}
+                                 renderText={value => 
+                                 <div>{value}</div>} 
+                             /> : "Not yet calculated" }
                                  </td> 
                                <td>
-                                {/* { deal.totalProfitAndLoss !==  0.0 ?  
+                                { deal.totalProfitAndLoss !==  null ?  
                                   <CurrencyFormat value={deal.totalProfitAndLoss}
                                             decimalScale={2} 
                                             displayType={'text'} 
@@ -156,11 +160,11 @@ const FxPnL = () => {
                                             prefix={'USD'}
                                             renderText={value => 
                                             <div>{value}</div>} 
-                                        /> : "Not yet calculated" } */}
-                               </td>  
+                                        /> : "Not yet calculated" }
+                               </td>   
                              </tr> 
                               ) :
-                              <h4>No dealers saved</h4>
+                              <h4>No deals present</h4>
                             }
                           </tbody> 
                         </table> 

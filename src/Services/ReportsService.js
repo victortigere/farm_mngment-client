@@ -14,7 +14,6 @@ export default class ReportsApiService {
     }
 
 static getFxPnLByDate(date) {
-    console.log(date)
     const token = localStorage.getItem('token')
     return  fetch(URL + `/api/pnl/${date}`,{
         'method': 'GET',

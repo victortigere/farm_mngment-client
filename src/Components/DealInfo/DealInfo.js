@@ -284,6 +284,8 @@ const DealInfo = () =>  {
                                 </td>
                                 <td>{deal.sellSourceOfFunds}</td>
                                 <td>
+                                  {
+                                    deal.realizedPnL !== null ? 
                                     <CurrencyFormat value={deal.realizedPnL} 
                                         decimalScale={2} 
                                         displayType={'text'} 
@@ -293,25 +295,27 @@ const DealInfo = () =>  {
                                         // prefix={'ZWL'}
                                         renderText={value => 
                                         <div>{value}</div>} 
-                                    />
+                                        /> : 
+                                        "Not yet Calculated"
+                                    }
                                 </td>
                                 <td>
-                                <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
-                                        decimalScale={2} 
-                                        displayType={'text'} 
-                                        thousandSeparator={true} 
-                                        fixedDecimalScale={true}
-                                        prefix={'USD'}
-                                        renderText={value => 
-                                        <div>{value}</div>} 
-                                    />
-                                    
+                                  { deal.realizedPnlBaseCurrency !== null ? 
+                                    <CurrencyFormat value={deal.realizedPnlBaseCurrency} 
+                                    decimalScale={2} 
+                                    displayType={'text'} 
+                                    thousandSeparator={true} 
+                                    fixedDecimalScale={true}
+                                    prefix={'USD'}
+                                    renderText={value => 
+                                    <div>{value}</div>} 
+                                    />  : 
+                                    "Not yet Calculated"
+                                  } 
                                 </td>
-                                {/* <td>Not yet calculated</td>
-                                <td>Not yet calculated</td> */}
                                 
                                 <td>
-                                  {/* { deal.unRealizedProfit !== null ? 
+                                  { deal.unRealizedProfit !== null ? 
                                     <CurrencyFormat value={deal.unRealizedProfit} 
                                       decimalScale={2} 
                                       displayType={'text'} 
@@ -320,11 +324,11 @@ const DealInfo = () =>  {
                                       prefix={'USD'}
                                       renderText={value => 
                                       <div>{value}</div>} 
-                                  /> : "Not yet calculated" } */}
+                                  /> : "Not yet calculated" }
                                 </td>
 
                                 <td>
-                                  {/* { deal.totalProfitAndLoss !== null ? 
+                                  { deal.totalProfitAndLoss !== null ? 
                                   <CurrencyFormat value={deal.totalProfitAndLoss} 
                                   decimalScale={2} 
                                   displayType={'text'} 
@@ -333,7 +337,7 @@ const DealInfo = () =>  {
                                   prefix={'USD'}
                                   renderText={value => 
                                   <div>{value}</div>} 
-                              /> : "Not yet calculated" } */}
+                              /> : "Not yet calculated" }
                               </td>
                               </tr> 
                           </tbody>
